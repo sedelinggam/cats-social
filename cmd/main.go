@@ -1,6 +1,8 @@
 package main
 
 import (
+	v1 "cats-social/internal/delivery/http/v1"
+	postgresqlpkg "cats-social/pkg/database/postgresql"
 	"log"
 	"os"
 
@@ -18,9 +20,13 @@ func main() {
 	if err != nil {
 		log.Fatal("error: failed to load the env file")
 	}
+	var (
+		db = postgresqlpkg.InitPostgreSQL()
+	)
 	app := fiber.New(fiber.Config{
-		JSONEncoder: json.Marshal,
-		JSONDecoder: json.Unmarshal,
+		JSONEncoder:       json.Marshal,
+		JSONDecoder:       json.Unmarshal,
+		EnablePrintRoutes: true,
 	})
 
 	if os.Getenv("APP_ENV") == "local" {
@@ -29,6 +35,9 @@ func main() {
 			Logger: logger,
 		}))
 	}
+
+	// Init Router
+	v1.Init(app, db)
 
 	//Start the default fiber server
 	app.Listen(":8080")
