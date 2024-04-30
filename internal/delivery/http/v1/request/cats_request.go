@@ -10,13 +10,13 @@ type CreateCat struct {
 }
 
 type GetCats struct {
-	ID               string `params:"id"`
-	Limit            int32  `params:"limit"`
-	Offset           int32  `params:"offset"`
-	Race             string `params:"race"`
-	Sex              string `params:"sex"`
-	IsAlreadyMatched bool   `params:"isAlreadyMatched"`
-	AgeInMonth       int32  `params:"ageInMonth"`
-	Owned            bool   `params:"owned"`
-	Search           string `params:"search"`
+	ID         string `query:"id" validate:"uuid"`
+	Limit      int32  `query:"limit" validate:"isdefault=5"`
+	Offset     int32  `query:"offset" validate:"isdefault=0"`
+	Race       string `query:"race" validate:"oneof=Persian"`
+	Sex        string `query:"sex" validate:"oneof=male female"`
+	HasMatched bool   `query:"hasMatched" validate:"boolean"`
+	AgeInMonth string `query:"ageInMonth"`
+	Owned      bool   `query:"owned" validate:"boolean"`
+	Search     string `query:"search"`
 }
