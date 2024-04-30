@@ -4,8 +4,10 @@ import (
 	"cats-social/internal/delivery/http/v1/request"
 	"cats-social/internal/delivery/http/v1/response"
 	"cats-social/internal/entity"
+	"cats-social/pkg/lumen"
 	"context"
 	"fmt"
+	"net/url"
 	"strings"
 	"time"
 
@@ -32,11 +34,17 @@ func (cs catService) CreateCat(ctx context.Context, requestData request.CreateCa
 		IsAlreadyMatch: false,
 		CreatedAt:      time.Now(),
 	}
+	//Check if url
+	for _, v := range requestData.ImageUrls {
+		_, err := url.ParseRequestURI(v)
+		if err != nil {
+			lumen.NewError(lumen.ErrBadRequest, err)
+		}
+	}
 	catData.Image = fmt.Sprintf("{%v}", strings.Join(requestData.ImageUrls, ", "))
-	fmt.Println(catData.Image, "CCC")
 	err = cs.catRepo.Create(ctx, catData)
 	if err != nil {
-		return nil, err
+		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 
 	return &response.CreateCat{
