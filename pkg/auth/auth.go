@@ -3,6 +3,7 @@ package auth
 import (
 	"cats-social/config"
 	"cats-social/internal/entity"
+	"cats-social/pkg/lumen"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -14,6 +15,10 @@ import (
 func NewAuthMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey: []byte(config.JWTSecret()),
+		ErrorHandler: func(c *fiber.Ctx, err error) error {
+			err = lumen.NewError(lumen.ErrUnauthorized, err)
+			return lumen.FromError(err).SendResponse(c)
+		},
 	})
 }
 

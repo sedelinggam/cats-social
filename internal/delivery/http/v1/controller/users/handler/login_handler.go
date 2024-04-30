@@ -3,7 +3,9 @@ package usersHandler
 import (
 	"cats-social/internal/delivery/http/v1/request"
 	"cats-social/internal/delivery/http/v1/response"
+	"cats-social/pkg/lumen"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -19,11 +21,21 @@ func (uh userHandler) Login(c *fiber.Ctx) error {
 			"error": err.Error(),
 		})
 	}
-	resp, err = uh.userService.Login(c.Context(), req)
+	// Create a new validator instance
+	validate := validator.New()
+
+	// Validate the User struct
+	err = validate.Struct(req)
 	if err != nil {
+		// Validation failed, handle the error
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
 			"error": err.Error(),
 		})
+	}
+
+	resp, err = uh.userService.Login(c.Context(), req)
+	if err != nil {
+		return lumen.FromError(err).SendResponse(c)
 	}
 	return c.JSON(resp)
 }

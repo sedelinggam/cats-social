@@ -5,6 +5,7 @@ import (
 	"cats-social/internal/delivery/http/v1/response"
 	"cats-social/internal/entity"
 	"cats-social/pkg/auth"
+	"cats-social/pkg/lumen"
 	"cats-social/pkg/password"
 	"context"
 	"time"
@@ -20,7 +21,7 @@ func (us userService) Register(ctx context.Context, requestData request.UserRegi
 	//Password Hash
 	hashPassword, err = password.HashPassword(requestData.Password)
 	if err != nil {
-		return nil, err
+		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 	//Create User
 	userData := entity.User{
@@ -32,13 +33,17 @@ func (us userService) Register(ctx context.Context, requestData request.UserRegi
 	}
 	err = us.userRepo.Create(ctx, userData)
 	if err != nil {
-		return nil, err
+		//Duplicate unique key
+		if lumen.CheckErrorSQLUnique(err) {
+			return nil, lumen.NewError(lumen.ErrConflict, err)
+		}
+		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 
 	// Create the Claims
 	accessToken, err := auth.GenerateToken(userData)
 	if err != nil {
-		return nil, err
+		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 	return &response.UserAccessToken{
 		Email:       requestData.Email,
