@@ -33,5 +33,8 @@ func (uh userHandler) Login(c *fiber.Ctx) error {
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}
-	return c.JSON(resp)
+	return c.Status(fiber.StatusOK).JSON(response.Common{
+		Message: "User logged successfully",
+		Data:    resp,
+	})
 }

@@ -17,9 +17,8 @@ func (uh userHandler) Register(c *fiber.Ctx) error {
 	)
 	err = c.BodyParser(&req)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
+
 	}
 	// Create a new validator instance
 	validate := validator.New()
@@ -28,14 +27,16 @@ func (uh userHandler) Register(c *fiber.Ctx) error {
 	err = validate.Struct(req)
 	if err != nil {
 		// Validation failed, handle the error
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
+
 	}
 
 	resp, err = uh.userService.Register(c.Context(), req)
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}
-	return c.JSON(resp)
+	return c.Status(fiber.StatusCreated).JSON(response.Common{
+		Message: "User registered successfully",
+		Data:    resp,
+	})
 }

@@ -19,6 +19,7 @@ func (ch catHandler) CreateCat(c *fiber.Ctx) error {
 	if err != nil {
 		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
 	}
+	//Get jwt user ID
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)
 	userID := claims["id"].(string)
@@ -28,7 +29,8 @@ func (ch catHandler) CreateCat(c *fiber.Ctx) error {
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}
-	return c.JSON(response.Common{
+
+	return c.Status(fiber.StatusCreated).JSON(response.Common{
 		Message: "success",
 		Data:    resp,
 	})

@@ -34,7 +34,6 @@ func (cs catService) CreateCat(ctx context.Context, requestData request.CreateCa
 		IsAlreadyMatch: false,
 		CreatedAt:      time.Now(),
 	}
-
 	//Check if url
 	for _, v := range requestData.ImageUrls {
 		_, err := url.ParseRequestURI(v)
