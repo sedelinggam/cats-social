@@ -23,10 +23,11 @@ func main() {
 	var (
 		db = postgresqlpkg.InitPostgreSQL()
 	)
+	//
 	app := fiber.New(fiber.Config{
 		JSONEncoder:       json.Marshal,
 		JSONDecoder:       json.Unmarshal,
-		EnablePrintRoutes: true,
+		EnablePrintRoutes: false,
 	})
 
 	if os.Getenv("APP_ENV") == "local" {
