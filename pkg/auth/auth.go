@@ -16,8 +16,7 @@ func NewAuthMiddleware() fiber.Handler {
 	return jwtware.New(jwtware.Config{
 		SigningKey: []byte(config.JWTSecret()),
 		ErrorHandler: func(c *fiber.Ctx, err error) error {
-			err = lumen.NewError(lumen.ErrUnauthorized, err)
-			return lumen.FromError(err).SendResponse(c)
+			return lumen.FromError(lumen.NewError(lumen.ErrUnauthorized, err)).SendResponse(c)
 		},
 	})
 }

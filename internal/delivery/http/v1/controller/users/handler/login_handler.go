@@ -17,9 +17,7 @@ func (uh userHandler) Login(c *fiber.Ctx) error {
 	)
 	err = c.BodyParser(&req)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
 	}
 	// Create a new validator instance
 	validate := validator.New()
@@ -28,9 +26,7 @@ func (uh userHandler) Login(c *fiber.Ctx) error {
 	err = validate.Struct(req)
 	if err != nil {
 		// Validation failed, handle the error
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
 	}
 
 	resp, err = uh.userService.Login(c.Context(), req)

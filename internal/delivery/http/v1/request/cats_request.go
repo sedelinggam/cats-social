@@ -6,5 +6,5 @@ type CreateCat struct {
 	Sex         string   `json:"sex" validate:"required"`
 	AgeInMonth  int32    `json:"ageInMonth" validate:"required"`
 	Description string   `json:"description" validate:"required"`
-	ImageUrls   []string `json:"imageUrls" validate:"required"`
+	ImageUrls   []string `json:"imageUrls" validate:"required,http_url"`
 }
