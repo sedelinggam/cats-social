@@ -11,9 +11,9 @@ type CreateCat struct {
 
 type GetCats struct {
 	ID         string `query:"id" validate:"uuid"`
-	Limit      int32  `query:"limit" validate:"isdefault=5"`
-	Offset     int32  `query:"offset" validate:"isdefault=0"`
-	Race       string `query:"race" validate:"oneof=Persian"`
+	Limit      int32  `query:"limit"`
+	Offset     int32  `query:"offset"`
+	Race       string `query:"race" validate:"oneof=Persian 'Maine Coon' Ragdoll Bengal Sphynx 'British Shorthair' Abyssinian 'Scottish Fold' Birman"`
 	Sex        string `query:"sex" validate:"oneof=male female"`
 	HasMatched bool   `query:"hasMatched" validate:"boolean"`
 	AgeInMonth string `query:"ageInMonth"`
