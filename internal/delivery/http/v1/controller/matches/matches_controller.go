@@ -10,11 +10,11 @@ import (
 
 func Init(group fiber.Router, matchSvc matchesService.MatchService) {
 	handler := matchHandler.NewHandler(matchSvc)
-	user := group.Group("/cat/match")
+	match := group.Group("/cat/match")
 
 	//Private Route
 	jwt := auth.NewAuthMiddleware()
-	privateRoute := user.Use(jwt)
+	privateRoute := match.Use(jwt)
 	privateRoute.Post("/", handler.CreateMatch)
 	privateRoute.Get("/", handler.GetMatches)
 }
