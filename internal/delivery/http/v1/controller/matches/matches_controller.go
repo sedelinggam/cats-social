@@ -16,4 +16,5 @@ func Init(group fiber.Router, matchSvc matchesService.MatchService) {
 	jwt := auth.NewAuthMiddleware()
 	privateRoute := user.Use(jwt)
 	privateRoute.Post("/", handler.CreateMatch)
+	privateRoute.Get("/", handler.GetMatches)
 }

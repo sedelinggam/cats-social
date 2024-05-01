@@ -1,6 +1,8 @@
 package entity
 
-import "time"
+import (
+	"time"
+)
 
 type Match struct {
 	ID         string    `db:"id"`
@@ -10,6 +12,10 @@ type Match struct {
 	ReceiverID string    `db:"receiver_id"`
 	Message    string    `db:"message"`
 	CreatedAt  time.Time `db:"created_at"`
+	UserCat    *Cat      `db:"-"`
+	MatchCat   *Cat      `db:"-"`
+	Issuer     *User     `db:"-"`
+	Receiver   *User     `db:"-"`
 }
 
 func (g Match) TableName() string {

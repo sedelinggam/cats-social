@@ -1,0 +1,60 @@
+package matchesService
+
+import (
+	"cats-social/internal/delivery/http/v1/response"
+	"cats-social/pkg/lumen"
+	"context"
+	"time"
+)
+
+func (ms matchService) GetMatches(ctx context.Context, userID string) ([]response.GetMatches, error) {
+
+	matches, err := ms.matchRepo.GetMatches(ctx, userID)
+
+	if err != nil {
+		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
+	}
+
+	if len(matches) == 0 {
+		return []response.GetMatches{}, nil
+	}
+
+	var resp []response.GetMatches
+
+	for _, match := range matches {
+		resp = append(resp, response.GetMatches{
+			ID: match.ID,
+			IssuedBy: response.GetUser{
+				Name:      match.Issuer.Name,
+				Email:     match.Issuer.Email,
+				CreatedAt: match.Issuer.CreatedAt.Format(time.RFC3339),
+			},
+			MatchCatDetail: response.GetCat{
+				ID:          match.MatchCat.ID,
+				Name:        match.MatchCat.Name,
+				Race:        match.MatchCat.Race,
+				Sex:         match.MatchCat.Sex,
+				Description: match.MatchCat.Description,
+				AgeInMonth:  match.MatchCat.AgeInMonth,
+				ImageUrls:   match.MatchCat.Image,
+				HasMatched:  match.MatchCat.IsAlreadyMatch,
+				CreatedAt:   match.MatchCat.CreatedAt.Format(time.RFC3339),
+			},
+			UserCatDetail: response.GetCat{
+				ID:          match.UserCat.ID,
+				Name:        match.UserCat.Name,
+				Race:        match.UserCat.Race,
+				Sex:         match.UserCat.Sex,
+				Description: match.UserCat.Description,
+				AgeInMonth:  match.UserCat.AgeInMonth,
+				ImageUrls:   match.UserCat.Image,
+				HasMatched:  match.UserCat.IsAlreadyMatch,
+				CreatedAt:   match.UserCat.CreatedAt.Format(time.RFC3339),
+			},
+			Message:   match.Message,
+			CreatedAt: match.CreatedAt.Format(time.RFC3339),
+		})
+	}
+
+	return resp, nil
+}
