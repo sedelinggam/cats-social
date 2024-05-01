@@ -8,12 +8,12 @@ import (
 )
 
 func (cs catService) GetCats(ctx context.Context, requestData request.GetCats) (*[]response.GetCats, error) {
-
 	cats, err := cs.catRepo.GetCats(ctx, requestData)
 
 	if err != nil {
 		return nil, err
 	}
+
 	catSlice := *cats
 	catsResp := []response.GetCats{}
 
