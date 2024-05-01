@@ -12,13 +12,17 @@ func (cr matchRepository) Create(ctx context.Context, data entity.Match) error {
 		match_cat_id,
 		user_cat_id,
 		created_at,
-		message
+		message,
+		issuer_id,
+		receiver_id
 		) VALUES (
 		:id,
 		:match_cat_id,
 		:user_cat_id,
 		:created_at,
-		:message
+		:message,
+		:issuer_id,
+		:receiver_id
 		)`, data.TableName())
 
 	tx := cr.db.MustBegin()

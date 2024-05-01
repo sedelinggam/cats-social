@@ -25,6 +25,14 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 
+	//Get user ID
+	userID := ctx.Value("user_id").(string)
+
+	// Check if cat is belong to the user
+	if userCat.UserID != userID {
+		return nil, lumen.NewError(lumen.ErrNotFound, err)
+	}
+
 	// Check if the matched cat is not found
 
 	matchCat, err := ms.catRepo.GetById(ctx, requestData.MatchCatID)
@@ -61,6 +69,8 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 		ID:         uuid.NewString(),
 		MatchCatID: requestData.MatchCatID,
 		UserCatID:  requestData.UserCatID,
+		IssuerID:   userCat.UserID,
+		ReceiverID: matchCat.UserID,
 		Message:    requestData.Message,
 		CreatedAt:  time.Now(),
 	}
