@@ -62,8 +62,6 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 		return nil, lumen.NewError(lumen.ErrBadRequest, err)
 	}
 
-	// TODO: Implement transaction
-
 	//Create Match
 	matchData := entity.Match{
 		ID:         uuid.NewString(),
@@ -81,8 +79,6 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 	if err != nil {
 		return nil, err
 	}
-
-	// TODO: Update the user cat and match cat is already matched
 
 	return &response.CreateMatch{
 		MatchCatID: matchData.MatchCatID,
