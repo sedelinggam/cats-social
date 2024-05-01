@@ -3,6 +3,7 @@ package catsService
 import (
 	"cats-social/internal/delivery/http/v1/request"
 	"cats-social/internal/delivery/http/v1/response"
+	"cats-social/pkg/lumen"
 	"context"
 	"strings"
 )
@@ -11,7 +12,11 @@ func (cs catService) GetCats(ctx context.Context, requestData request.GetCats) (
 	cats, err := cs.catRepo.GetCats(ctx, requestData)
 
 	if err != nil {
-		return nil, err
+		if lumen.CheckErrorSQLNotFound(err) {
+			return nil, lumen.NewError(lumen.ErrNotFound, err)
+		}
+
+		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 
 	catSlice := *cats

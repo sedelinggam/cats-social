@@ -22,9 +22,7 @@ func (ch catHandler) GetCats(c *fiber.Ctx) error {
 
 	err = c.QueryParser(&req)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
 	}
 
 	validator := validator.New()
@@ -72,10 +70,9 @@ func (ch catHandler) GetCats(c *fiber.Ctx) error {
 
 	resp, err = ch.catService.GetCats(ctx, req)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"error": err.Error(),
-		})
+		return lumen.FromError(err).SendResponse(c)
 	}
+
 	return c.JSON(response.Common{
 		Message: "success",
 		Data:    resp,
