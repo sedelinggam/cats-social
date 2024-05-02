@@ -13,6 +13,7 @@ type catRepository struct {
 
 type CatsRepository interface {
 	Create(ctx context.Context, data entity.Cat) error
+	GetById(ctx context.Context, id string) (*entity.Cat, error)
 }
 
 func NewRepository(db *sqlx.DB) CatsRepository {
