@@ -4,6 +4,7 @@ import (
 	"cats-social/internal/delivery/http/v1/response"
 	"cats-social/pkg/lumen"
 	"context"
+	"strings"
 	"time"
 )
 
@@ -12,6 +13,9 @@ func (ms matchService) GetMatches(ctx context.Context, userID string) ([]respons
 	matches, err := ms.matchRepo.GetMatches(ctx, userID)
 
 	if err != nil {
+		if lumen.CheckErrorSQLNotFound(err) {
+			return nil, lumen.NewError(lumen.ErrNotFound, err)
+		}
 		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 
@@ -36,7 +40,7 @@ func (ms matchService) GetMatches(ctx context.Context, userID string) ([]respons
 				Sex:         match.MatchCat.Sex,
 				Description: match.MatchCat.Description,
 				AgeInMonth:  match.MatchCat.AgeInMonth,
-				ImageUrls:   match.MatchCat.Image,
+				ImageUrls:   strings.Split(match.MatchCat.Image, ","), // split image urls
 				HasMatched:  match.MatchCat.IsAlreadyMatch,
 				CreatedAt:   match.MatchCat.CreatedAt.Format(time.RFC3339),
 			},
@@ -47,7 +51,7 @@ func (ms matchService) GetMatches(ctx context.Context, userID string) ([]respons
 				Sex:         match.UserCat.Sex,
 				Description: match.UserCat.Description,
 				AgeInMonth:  match.UserCat.AgeInMonth,
-				ImageUrls:   match.UserCat.Image,
+				ImageUrls:   strings.Split(match.UserCat.Image, ","), // split image urls
 				HasMatched:  match.UserCat.IsAlreadyMatch,
 				CreatedAt:   match.UserCat.CreatedAt.Format(time.RFC3339),
 			},
