@@ -1,6 +1,8 @@
 package lumen
 
-import "errors"
+import (
+	"errors"
+)
 
 var (
 	ErrBadRequest      = errors.New("bad request")      //400

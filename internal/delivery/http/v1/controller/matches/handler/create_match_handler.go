@@ -1,4 +1,4 @@
-package usersHandler
+package matchHandler
 
 import (
 	"cats-social/internal/delivery/http/v1/request"
@@ -7,36 +7,41 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
+	"github.com/golang-jwt/jwt/v4"
 )
 
-func (uh userHandler) Register(c *fiber.Ctx) error {
+func (mh matchHandler) CreateMatch(c *fiber.Ctx) error {
 	var (
-		req  request.UserRegister
-		resp *response.UserAccessToken
+		req  request.CreateMatch
+		resp *response.CreateMatch
 		err  error
 	)
 	err = c.BodyParser(&req)
 	if err != nil {
 		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
-
 	}
+
 	// Create a new validator instance
 	validate := validator.New()
-
-	// Validate the User struct
 	err = validate.Struct(req)
 	if err != nil {
-		// Validation failed, handle the error
 		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
-
 	}
 
-	resp, err = uh.userService.Register(c.Context(), req)
+	//Get jwt user ID
+	user := c.Locals("user").(*jwt.Token)
+	claims := user.Claims.(jwt.MapClaims)
+	userID := claims["id"].(string)
+	ctx := c.Context()
+	ctx.SetUserValue("user_id", userID)
+	resp, err = mh.matchService.CreateMatch(ctx, req)
+
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}
+
 	return c.Status(fiber.StatusCreated).JSON(response.Common{
-		Message: "User registered successfully",
+		Message: "success",
 		Data:    resp,
 	})
 }
