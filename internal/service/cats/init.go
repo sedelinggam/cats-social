@@ -15,6 +15,7 @@ type catService struct {
 
 type CatService interface {
 	CreateCat(ctx context.Context, requestData request.CreateCat) (*response.CreateCat, error)
+	UpdateCat(ctx context.Context, requestData request.UpdateCat) (*response.UpdateCat, error)
 }
 
 func NewCatService(db *sqlx.DB) CatService {
