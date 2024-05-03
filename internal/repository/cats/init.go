@@ -14,6 +14,7 @@ type catRepository struct {
 
 type CatsRepository interface {
 	Create(ctx context.Context, data entity.Cat) error
+	GetById(ctx context.Context, id string) (*entity.Cat, error)
 	GetCats(ctx context.Context, data request.GetCats) (*[]entity.Cat, error)
 }
 

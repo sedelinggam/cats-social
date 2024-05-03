@@ -5,3 +5,9 @@ type UserAccessToken struct {
 	Name        string `json:"name"`
 	AccessToken string `json:"accessToken"`
 }
+
+type GetUser struct {
+	Name      string `json:"name"`
+	Email     string `json:"email"`
+	CreatedAt string `json:"createdAt"`
+}
