@@ -8,7 +8,7 @@ CREATE TABLE cats (
   name varchar(30) NOT NULL,
   race cat_race NOT NULL,
   sex cat_sex NOT NULL,
-  age_in_month smallint NOT NULL,
+  age_in_month INT NOT NULL,
   image_urls text[] NOT NULL,
   description varchar(200) NOT NULL,
   is_already_matched boolean NOT NULL,

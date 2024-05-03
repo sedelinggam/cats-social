@@ -5,6 +5,7 @@ import (
 	"cats-social/internal/delivery/http/v1/response"
 	"cats-social/pkg/lumen"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v4"
 )
@@ -19,6 +20,14 @@ func (ch catHandler) UpdateCat(c *fiber.Ctx) error {
 	if err != nil {
 		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
 	}
+
+	// Create a new validator instance
+	validate := validator.New()
+	err = validate.Struct(req)
+	if err != nil {
+		return lumen.FromError(lumen.NewError(lumen.ErrBadRequest, err)).SendResponse(c)
+	}
+
 	//Get jwt user ID
 	user := c.Locals("user").(*jwt.Token)
 	claims := user.Claims.(jwt.MapClaims)

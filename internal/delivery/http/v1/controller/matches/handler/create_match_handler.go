@@ -1,4 +1,4 @@
-package catHandler
+package matchHandler
 
 import (
 	"cats-social/internal/delivery/http/v1/request"
@@ -10,10 +10,10 @@ import (
 	"github.com/golang-jwt/jwt/v4"
 )
 
-func (ch catHandler) CreateCat(c *fiber.Ctx) error {
+func (mh matchHandler) CreateMatch(c *fiber.Ctx) error {
 	var (
-		req  request.CreateCat
-		resp *response.CreateCat
+		req  request.CreateMatch
+		resp *response.CreateMatch
 		err  error
 	)
 	err = c.BodyParser(&req)
@@ -34,7 +34,8 @@ func (ch catHandler) CreateCat(c *fiber.Ctx) error {
 	userID := claims["id"].(string)
 	ctx := c.Context()
 	ctx.SetUserValue("user_id", userID)
-	resp, err = ch.catService.CreateCat(ctx, req)
+	resp, err = mh.matchService.CreateMatch(ctx, req)
+
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}

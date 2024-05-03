@@ -15,6 +15,7 @@ func Init(group fiber.Router, catSvc catsService.CatService) {
 	//Private Route
 	jwt := auth.NewAuthMiddleware()
 	privateRoute := user.Use(jwt)
-	privateRoute.Post("/create", handler.CreateCat)
-	privateRoute.Post("/update/:id", handler.UpdateCat)
+	privateRoute.Post("", handler.CreateCat)
+	privateRoute.Put(":id", handler.UpdateCat)
+	privateRoute.Get("", handler.GetCats)
 }

@@ -10,6 +10,8 @@ import (
 	"net/url"
 	"strings"
 	"time"
+
+	"github.com/lib/pq"
 )
 
 func (cs catService) UpdateCat(ctx context.Context, requestData request.UpdateCat) (*response.UpdateCat, error) {
@@ -20,6 +22,13 @@ func (cs catService) UpdateCat(ctx context.Context, requestData request.UpdateCa
 
 	//Get user ID
 	userID := ctx.Value("user_id").(string)
+
+	//Check if cat is match
+	cat, _ := cs.matchRepo.GetMatches(ctx, requestData.ID)
+	if cat != nil {
+		lumen.NewError(lumen.ErrBadRequest, err)
+	}
+
 	//Create Cat
 	catData := entity.Cat{
 		ID:          requestData.ID,
@@ -29,7 +38,10 @@ func (cs catService) UpdateCat(ctx context.Context, requestData request.UpdateCa
 		Sex:         requestData.Sex,
 		AgeInMonth:  requestData.AgeInMonth,
 		Description: requestData.Description,
-		UpdatedAt:   time.Now(),
+		UpdatedAt: pq.NullTime{
+			Time:  time.Now(),
+			Valid: true,
+		},
 	}
 
 	//Check if url
@@ -51,6 +63,6 @@ func (cs catService) UpdateCat(ctx context.Context, requestData request.UpdateCa
 
 	return &response.UpdateCat{
 		ID:        catData.ID,
-		UpdatedAt: catData.UpdatedAt.Format(time.RFC3339),
+		UpdatedAt: catData.UpdatedAt.Time.Format(time.RFC3339),
 	}, nil
 }
