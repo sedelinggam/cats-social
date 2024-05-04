@@ -5,3 +5,7 @@ type CreateMatch struct {
 	UserCatID  string `json:"userCatId" validate:"required"`
 	Message    string `json:"message" validate:"required,min=5,max=120"`
 }
+
+type ApproveMatch struct {
+	MatchID string `json:"matchId" validate:"required"`
+}

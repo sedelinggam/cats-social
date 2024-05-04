@@ -14,3 +14,9 @@ type GetMatches struct {
 	Message        string  `json:"message"`
 	CreatedAt      string  `json:"createdAt"`
 }
+
+type ApproveMatch struct {
+	MatchID    string `json:"matchId"`
+	UserCatID  string `json:"userCatId"`
+	MatchCatID string `json:"matchCatId"`
+}

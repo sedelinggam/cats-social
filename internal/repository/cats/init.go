@@ -18,6 +18,7 @@ type CatsRepository interface {
 	Delete(ctx context.Context, catID string) error
 	GetById(ctx context.Context, id string) (*entity.Cat, error)
 	GetCats(ctx context.Context, data request.GetCats) (*[]entity.Cat, error)
+	UpdateIsAlreadyMatch(ctx context.Context, ids []string, isAlreadyMatch bool) error
 }
 
 func NewRepository(db *sqlx.DB) CatsRepository {
