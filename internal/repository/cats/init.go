@@ -15,7 +15,7 @@ type catRepository struct {
 type CatsRepository interface {
 	Create(ctx context.Context, data entity.Cat) error
 	Update(ctx context.Context, data entity.Cat) error
-	Delete(ctx context.Context, catID string) error
+	Delete(ctx context.Context, catID, userID string) error
 	GetById(ctx context.Context, id string) (*entity.Cat, error)
 	GetCats(ctx context.Context, data request.GetCats) (*[]entity.Cat, error)
 }

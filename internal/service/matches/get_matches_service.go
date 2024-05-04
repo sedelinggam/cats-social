@@ -3,13 +3,18 @@ package matchesService
 import (
 	"cats-social/internal/delivery/http/v1/response"
 	"cats-social/pkg/lumen"
+	"cats-social/pkg/util"
 	"context"
+	"errors"
 	"strings"
 	"time"
 )
 
 func (ms matchService) GetMatches(ctx context.Context, userID string) ([]response.GetMatches, error) {
 
+	if !util.IsValidUUID(userID) {
+		return nil, lumen.NewError(lumen.ErrNotFound, errors.New("uuid not valid"))
+	}
 	matches, err := ms.matchRepo.GetMatches(ctx, userID)
 
 	if err != nil {

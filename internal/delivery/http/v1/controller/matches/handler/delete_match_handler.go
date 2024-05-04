@@ -1,4 +1,4 @@
-package catHandler
+package matchHandler
 
 import (
 	"cats-social/internal/delivery/http/v1/response"
@@ -9,7 +9,7 @@ import (
 	// "fmt"
 )
 
-func (ch catHandler) DeleteCat(c *fiber.Ctx) error {
+func (mh matchHandler) DeleteCat(c *fiber.Ctx) error {
 	var (
 		resp *response.DeleteCat
 		err  error
@@ -25,7 +25,7 @@ func (ch catHandler) DeleteCat(c *fiber.Ctx) error {
 	userID := claims["id"].(string)
 	ctx.SetUserValue("user_id", userID)
 
-	resp, err = ch.catService.DeleteCat(ctx, catID)
+	resp, err = mh.matchService.DeleteMatch(ctx, catID)
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}

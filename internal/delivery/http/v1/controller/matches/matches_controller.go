@@ -17,4 +17,5 @@ func Init(group fiber.Router, matchSvc matchesService.MatchService) {
 	privateRoute := match.Use(jwt)
 	privateRoute.Post("/", handler.CreateMatch)
 	privateRoute.Get("/", handler.GetMatches)
+	privateRoute.Delete("/:id", handler.DeleteCat)
 }

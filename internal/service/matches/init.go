@@ -18,6 +18,7 @@ type matchService struct {
 type MatchService interface {
 	CreateMatch(ctx context.Context, requestData request.CreateMatch) (*response.CreateMatch, error)
 	GetMatches(ctx context.Context, userID string) ([]response.GetMatches, error)
+	DeleteMatch(ctx context.Context, matchID string) (*response.DeleteCat, error)
 }
 
 func NewMatchService(db *sqlx.DB) MatchService {

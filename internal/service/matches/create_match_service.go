@@ -5,15 +5,20 @@ import (
 	"cats-social/internal/delivery/http/v1/response"
 	"cats-social/internal/entity"
 	"cats-social/pkg/lumen"
+	"cats-social/pkg/util"
 	"context"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
 
 func (ms matchService) CreateMatch(ctx context.Context, requestData request.CreateMatch) (*response.CreateMatch, error) {
-
+	fmt.Println("AAAAAAAAAAAAAAAAAA", requestData)
+	if !util.IsValidUUID(requestData.UserCatID) {
+		return nil, lumen.NewError(lumen.ErrNotFound, errors.New("uuid not correct"))
+	}
 	userCat, err := ms.catRepo.GetById(ctx, requestData.UserCatID)
 	// Check if the user cat is not found
 	if err != nil {
@@ -28,13 +33,11 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 
 	// Check if cat is belong to the user
 	if userCat.UserID != userID {
-		return nil, lumen.NewError(lumen.ErrNotFound, err)
+		return nil, lumen.NewError(lumen.ErrNotFound, errors.New("cat not found"))
 	}
 
 	// Check if the matched cat is not found
-
 	matchCat, err := ms.catRepo.GetById(ctx, requestData.MatchCatID)
-
 	if err != nil {
 		if lumen.CheckErrorSQLNotFound(err) {
 			return nil, lumen.NewError(lumen.ErrNotFound, err)
