@@ -19,6 +19,7 @@ type CatService interface {
 	CreateCat(ctx context.Context, requestData request.CreateCat) (*response.CreateCat, error)
 	UpdateCat(ctx context.Context, requestData request.UpdateCat) (*response.UpdateCat, error)
 	GetCats(ctx context.Context, requestData request.GetCats) (*[]response.GetCats, error)
+	DeleteCat(ctx context.Context, catID string) (*response.DeleteCat, error)
 }
 
 func NewCatService(db *sqlx.DB) CatService {
