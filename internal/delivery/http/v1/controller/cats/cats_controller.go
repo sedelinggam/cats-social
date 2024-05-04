@@ -17,4 +17,7 @@ func Init(group fiber.Router, catSvc catsService.CatService) {
 	privateRoute := user.Use(jwt)
 	privateRoute.Post("/create", handler.CreateCat)
 	privateRoute.Get("", handler.GetCats)
+
+	//delete
+	privateRoute.Delete("/delete/:id", handler.DeleteCat)
 }
