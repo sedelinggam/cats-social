@@ -15,6 +15,9 @@ func FromError(err error) APIError {
 	var apiError APIError
 	var svcError Error
 	if errors.As(err, &svcError) {
+		if svcError.appError == nil {
+			apiError.Message = "generic error"
+		}
 		apiError.Message = svcError.appError.Error()
 		svcErr := svcError.SvcError()
 		switch svcErr {

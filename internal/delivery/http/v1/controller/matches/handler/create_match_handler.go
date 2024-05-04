@@ -35,7 +35,6 @@ func (mh matchHandler) CreateMatch(c *fiber.Ctx) error {
 	ctx := c.Context()
 	ctx.SetUserValue("user_id", userID)
 	resp, err = mh.matchService.CreateMatch(ctx, req)
-
 	if err != nil {
 		return lumen.FromError(err).SendResponse(c)
 	}

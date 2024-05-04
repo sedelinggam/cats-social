@@ -6,6 +6,7 @@ import (
 	"cats-social/internal/entity"
 	"cats-social/pkg/lumen"
 	"context"
+	"errors"
 	"time"
 
 	"github.com/google/uuid"
@@ -14,14 +15,11 @@ import (
 func (ms matchService) CreateMatch(ctx context.Context, requestData request.CreateMatch) (*response.CreateMatch, error) {
 
 	userCat, err := ms.catRepo.GetById(ctx, requestData.UserCatID)
-
 	// Check if the user cat is not found
 	if err != nil {
-
 		if lumen.CheckErrorSQLNotFound(err) {
 			return nil, lumen.NewError(lumen.ErrNotFound, err)
 		}
-
 		return nil, lumen.NewError(lumen.ErrInternalFailure, err)
 	}
 
@@ -38,7 +36,6 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 	matchCat, err := ms.catRepo.GetById(ctx, requestData.MatchCatID)
 
 	if err != nil {
-
 		if lumen.CheckErrorSQLNotFound(err) {
 			return nil, lumen.NewError(lumen.ErrNotFound, err)
 		}
@@ -48,18 +45,18 @@ func (ms matchService) CreateMatch(ctx context.Context, requestData request.Crea
 
 	// Check if the user cat gender is same
 	if userCat.Sex == matchCat.Sex {
-		return nil, lumen.NewError(lumen.ErrBadRequest, err)
+		return nil, lumen.NewError(lumen.ErrBadRequest, errors.New("cat gender is same"))
 	}
 
 	// Check if the user cat is already matched
 	if userCat.IsAlreadyMatch || matchCat.IsAlreadyMatch {
-		return nil, lumen.NewError(lumen.ErrBadRequest, err)
+		return nil, lumen.NewError(lumen.ErrBadRequest, errors.New("cat is already matched"))
 	}
 
 	// Check if same person is trying to match
 
 	if userCat.UserID == matchCat.UserID {
-		return nil, lumen.NewError(lumen.ErrBadRequest, err)
+		return nil, lumen.NewError(lumen.ErrBadRequest, errors.New("cat owned by same person"))
 	}
 
 	//Create Match
