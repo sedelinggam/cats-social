@@ -3,6 +3,8 @@ package util
 import (
 	"strconv"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 func IsValidAge(numString string, operator string) int {
@@ -28,4 +30,9 @@ func ParseAgeInMonth(ageInMonth string) int {
 		num := IsValidAge(ageInMonth, "")
 		return num
 	}
+}
+
+func IsValidUUID(u string) bool {
+	_, err := uuid.Parse(u)
+	return err == nil
 }

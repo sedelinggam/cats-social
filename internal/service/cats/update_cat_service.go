@@ -15,7 +15,6 @@ import (
 )
 
 func (cs catService) UpdateCat(ctx context.Context, requestData request.UpdateCat) (*response.UpdateCat, error) {
-	//Password Hash
 	var (
 		err error
 	)
@@ -24,8 +23,8 @@ func (cs catService) UpdateCat(ctx context.Context, requestData request.UpdateCa
 	userID := ctx.Value("user_id").(string)
 
 	//Check if cat is match
-	cat, _ := cs.matchRepo.GetMatches(ctx, requestData.ID)
-	if cat != nil {
+	issuerCat, err := cs.catRepo.GetById(ctx, requestData.ID)
+	if issuerCat.IsAlreadyMatch {
 		lumen.NewError(lumen.ErrBadRequest, err)
 	}
 

@@ -70,7 +70,8 @@ FROM
 		}
 	}
 
-	if shouldFilters.Owned {
+	fmt.Println("re", req.Owned)
+	if req.Owned {
 		userID := ctx.Value("user_id").(string)
 		filterValues = append(filterValues, userID)
 		whereClauses = append(whereClauses, fmt.Sprintf("user_id = $%d", len(filterValues)))
@@ -83,6 +84,9 @@ FROM
 
 	if len(whereClauses) > 0 {
 		query += fmt.Sprintf(" WHERE %s", strings.Join(whereClauses, " AND "))
+		query += " AND deleted_at IS NULL"
+	} else {
+		query += " WHERE deleted_at IS NULL"
 	}
 
 	query += " ORDER BY created_at ASC"

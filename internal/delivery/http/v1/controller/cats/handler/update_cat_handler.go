@@ -43,7 +43,7 @@ func (ch catHandler) UpdateCat(c *fiber.Ctx) error {
 		return lumen.FromError(err).SendResponse(c)
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(response.Common{
+	return c.Status(fiber.StatusOK).JSON(response.Common{
 		Message: "success",
 		Data:    resp,
 	})

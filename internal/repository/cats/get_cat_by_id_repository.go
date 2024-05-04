@@ -11,7 +11,7 @@ func (cr catRepository) GetById(ctx context.Context, id string) (*entity.Cat, er
 		resp entity.Cat
 		err  error
 	)
-	query := fmt.Sprintf(`SELECT * FROM %s WHERE "id" = $1`, resp.TableName())
+	query := fmt.Sprintf(`SELECT * FROM %s WHERE "id" = $1 AND "deleted_at" IS NULL`, resp.TableName())
 
 	err = cr.db.GetContext(ctx, &resp, query, id)
 	if err != nil {
