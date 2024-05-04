@@ -20,6 +20,7 @@ type MatchService interface {
 	GetMatches(ctx context.Context, userID string) ([]response.GetMatches, error)
 	ApproveMatch(ctx context.Context, requestData request.ApproveMatch) (*response.ApproveMatch, error)
 	DeleteMatch(ctx context.Context, matchID string) (*response.DeleteCat, error)
+	DeleteMatchReceiverID(ctx context.Context, matchID string) error
 }
 
 func NewMatchService(db *sqlx.DB) MatchService {

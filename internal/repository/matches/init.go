@@ -18,6 +18,7 @@ type MatchRepository interface {
 	GetMatchByID(ctx context.Context, matchID string) (*entity.Match, error)
 	DeleteOtherMatches(ctx context.Context, userID string, receiverID string, matchID string) error
 	Delete(ctx context.Context, id, userID string) error
+	DeleteReceiverID(ctx context.Context, id, userID string) error
 }
 
 func NewRepository(db *sqlx.DB) MatchRepository {

@@ -8,15 +8,13 @@ import (
 	"cats-social/pkg/util"
 	"context"
 	"errors"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 )
 
 func (ms matchService) CreateMatch(ctx context.Context, requestData request.CreateMatch) (*response.CreateMatch, error) {
-	fmt.Println("AAAAAAAAAAAAAAAAAA", requestData)
-	if !util.IsValidUUID(requestData.UserCatID) {
+	if !util.IsValidUUID(requestData.UserCatID) || !util.IsValidUUID(requestData.MatchCatID) {
 		return nil, lumen.NewError(lumen.ErrNotFound, errors.New("uuid not correct"))
 	}
 	userCat, err := ms.catRepo.GetById(ctx, requestData.UserCatID)

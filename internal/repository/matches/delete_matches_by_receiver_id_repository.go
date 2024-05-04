@@ -7,12 +7,12 @@ import (
 	"fmt"
 )
 
-func (mr matchRepository) Delete(ctx context.Context, matchID, userID string) error {
+func (mr matchRepository) DeleteReceiverID(ctx context.Context, matchID, userID string) error {
 	var (
 		resp entity.Match
 		err  error
 	)
-	query := fmt.Sprintf(`DELETE FROM %s where id = $1 AND issuer_id = $2`, resp.TableName())
+	query := fmt.Sprintf(`DELETE FROM %s where id = $1 AND receiver_id = $2`, resp.TableName())
 
 	tx := mr.db.MustBegin()
 	res, err := tx.ExecContext(ctx, query, matchID, userID)

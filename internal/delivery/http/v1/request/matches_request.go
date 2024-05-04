@@ -9,3 +9,7 @@ type CreateMatch struct {
 type ApproveMatch struct {
 	MatchID string `json:"matchId" validate:"required"`
 }
+
+type DeleteMatch struct {
+	MatchID string `json:"matchId" validate:"required"`
+}

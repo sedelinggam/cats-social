@@ -20,3 +20,9 @@ type ApproveMatch struct {
 	UserCatID  string `json:"userCatId"`
 	MatchCatID string `json:"matchCatId"`
 }
+
+type DeleteMatch struct {
+	MatchID    string `json:"matchId"`
+	UserCatID  string `json:"userCatId"`
+	MatchCatID string `json:"matchCatId"`
+}

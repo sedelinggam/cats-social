@@ -58,11 +58,11 @@ FROM
 		case strings.HasPrefix(req.AgeInMonth, ">"):
 			num := util.IsValidAge(req.AgeInMonth, ">")
 			filterValues = append(filterValues, num)
-			whereClauses = append(whereClauses, fmt.Sprintf("age_in_month >= $%d", len(filterValues)))
+			whereClauses = append(whereClauses, fmt.Sprintf("age_in_month > $%d", len(filterValues)))
 		case strings.HasPrefix(req.AgeInMonth, "<"):
 			num := util.IsValidAge(req.AgeInMonth, "<")
 			filterValues = append(filterValues, num)
-			whereClauses = append(whereClauses, fmt.Sprintf("age_in_month <= $%d", len(filterValues)))
+			whereClauses = append(whereClauses, fmt.Sprintf("age_in_month < $%d", len(filterValues)))
 		default:
 			num := util.IsValidAge(req.AgeInMonth, "")
 			filterValues = append(filterValues, num)
@@ -70,7 +70,6 @@ FROM
 		}
 	}
 
-	fmt.Println("re", req.Owned)
 	if req.Owned {
 		userID := ctx.Value("user_id").(string)
 		filterValues = append(filterValues, userID)
@@ -79,7 +78,7 @@ FROM
 
 	if shouldFilters.Search {
 		filterValues = append(filterValues, req.Search)
-		whereClauses = append(whereClauses, fmt.Sprintf("LOWER(CONCAT_WS(' ', id, user_id, race, name, sex, description, age_in_month, image_urls, is_already_matched, created_at)) ILIKE '%%' || $%d || '%%'", len(filterValues)))
+		whereClauses = append(whereClauses, fmt.Sprintf("LOWER(name) ILIKE '%%' || $%d || '%%'", len(filterValues)))
 	}
 
 	if len(whereClauses) > 0 {

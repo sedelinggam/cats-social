@@ -27,7 +27,7 @@ func ParseAgeInMonth(ageInMonth string) int {
 		num := IsValidAge(ageInMonth, "<")
 		return num
 	default:
-		num := IsValidAge(ageInMonth, "")
+		num := IsValidAge(ageInMonth, "=")
 		return num
 	}
 }
