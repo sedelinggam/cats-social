@@ -5,3 +5,6 @@ CREATE TABLE users (
   name VARCHAR (50) NOT NULL, 
   created_at timestamptz NOT NULL
 );
+
+CREATE INDEX users_id ON users (id);
+CREATE INDEX users_email ON users (email);

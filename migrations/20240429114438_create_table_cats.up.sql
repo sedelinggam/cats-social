@@ -17,3 +17,6 @@ CREATE TABLE cats (
   update_at timestamptz,
   CONSTRAINT fk_user FOREIGN KEY(user_id) REFERENCES users(id)
 );
+
+CREATE INDEX cats_id ON cats (id);
+CREATE INDEX cats_user_id ON cats (user_id);

@@ -42,4 +42,5 @@ func main() {
 
 	//Start the default fiber server
 	app.Listen(":8080")
+	db.Close()
 }

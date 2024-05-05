@@ -3,3 +3,7 @@ vendor
 .air.toml
 tmp
 .vscode
+
+*.key
+
+main_pinginciuman

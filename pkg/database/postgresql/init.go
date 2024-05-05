@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	_ "github.com/jackc/pgx/v4/stdlib"
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
 )
@@ -20,10 +21,9 @@ func InitPostgreSQL() *sqlx.DB {
 		Database: os.Getenv("DB_NAME"),
 	}
 
-	db, err := sqlx.Open("postgres", config.FormatDSN())
-	db.SetMaxIdleConns(18)
-	db.SetConnMaxLifetime(2 * time.Minute)
-	db.SetMaxOpenConns(18)
+	db, err := sqlx.Connect("pgx", config.FormatDSN())
+	db.SetMaxOpenConns(60)
+	db.SetConnMaxLifetime(60 * time.Millisecond)
 	if err != nil {
 		log.Println("m=GetPool,msg=connection has failed", err)
 	}
